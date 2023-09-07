@@ -1,6 +1,6 @@
 #include <stdio.h>
 #define max 20
-
+//EMPTY main method in the END 
 //Stack Operations using pass by reference
 struct Stack{
     int top;
@@ -12,7 +12,6 @@ void push(struct Stack *s,char item)
     return;
     s->stack[++(s->top)]=item;
     s->stack[s->top+1]='\0';
-    //printf("\t\t%c\t\t",s->stack[s->top]);
 }
 char pop(struct Stack *s)
 {
@@ -61,10 +60,9 @@ int compare(char ch1,char ch2)
 {
     struct Stack op={-1},postfix={-1};
     push(&op,'(');
-    int n,m;//int i=0;
+    int n,m;
     while(*infix!='\0')
     {
-        //printf("%d %c\n",++i,*infix);
         n = isop(*infix);
         if (n==-1)
         {push(&postfix,*infix);}
@@ -78,7 +76,6 @@ int compare(char ch1,char ch2)
                 }
                 pop(&op);
                 *infix++;
-                //printf(") %s %s",op.stack,postfix.stack);
                 continue;
             }
             m = compare(peek(&op),*infix);
@@ -95,24 +92,15 @@ int compare(char ch1,char ch2)
                         push(&postfix,pop(&op));
                 }while(compare(peek(&op),*infix)>0&&peek(&op)!='(');
                 continue;
-                }
-                
+                }   
             }
-            /*else if(m==0)
-            {
-                push(&postfix,pop(&op));
-                push(&op, *infix);//pop top and then push operator
-            }*/
             else //m<0
             {
                 push(&op,*infix);
             }
         }
-        //printf("%s\t %s\n",op.stack,postfix.stack);
         infix++;
     }
-    //printf("hhwihwi ");
-    //printf("%s",op.stack);
     while(peek(&op)!='('&&op.top>0)
     {
         push(&postfix,pop(&op));
@@ -123,7 +111,7 @@ int compare(char ch1,char ch2)
 }
 char* infixToPrefix(char* str)
 {
-    //infix=strrev(infix); not working....gives error
+    //infix=strrev(str); this method does not work bcz str is a pointer....gives error..any fixes??
     char revinfix[strlen(str)+1];//infix will stores revrsed expression
     strcpy(revinfix,str);
     char* start = revinfix;
@@ -138,41 +126,31 @@ char* infixToPrefix(char* str)
         end--;
     }
    
-    //printf("\n%s \n",revinfix);
     struct Stack op={-1},prefix={-1};
     push(&op,')');
     int n,m;
-    char *infix=revinfix;//&
+    char *infix=revinfix;
     while(*infix!='\0')
     {
-        //printf("%d %c\n",++i,*infix);
-        //printf("here1");
         n = isop(*infix);
         if (n==-1)
         {   push(&prefix,*infix);
-            //("here2");
         }
         else
         {
             if (*infix=='(')
             {
-                //printf("here3");
                 while(peek(&op)!=')')
                 {
-                    //printf("here4");
                     push(&prefix,pop(&op));
-                    //printf("STACK %s\t %s\n",op.stack,prefix.stack);
                 }
                 pop(&op);
-                //printf("\t\t%s\n",op.stack);
                 *infix++;
-                //printf(") %s %s",op.stack,postfix.stack);
                 continue;
             }
             m = compare(peek(&op),*infix);
             if (m>0)
             {
-                //printf("here5");
                 if(peek(&op)==')')
                 {
                     push(&op,*infix);
@@ -182,7 +160,6 @@ char* infixToPrefix(char* str)
                     do{
                         push(&prefix,pop(&op));
                     }while(compare(peek(&op),*infix)>0 && op.stack[op.top]!=')');
-                //printf("after %d..%s\n",op.top,op.stack);
                 continue;
                 }
             }
@@ -191,7 +168,6 @@ char* infixToPrefix(char* str)
                 push(&op,*infix);
             }
         }
-        //printf("STACK %s\t %s\n",op.stack,prefix.stack);
         infix++;
     }
     
@@ -215,6 +191,5 @@ char* infixToPrefix(char* str)
 }
 int main()
 {
-    infixToPostfix("a+b/c*(e+h*f)-g");
     return 0;
 }
